@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Builder
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class GymTransformService {
     public Gym toEntity(GymRequestDto gymRequestDto){
       return Gym.builder()

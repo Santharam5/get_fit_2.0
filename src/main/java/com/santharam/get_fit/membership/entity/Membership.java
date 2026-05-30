@@ -1,14 +1,12 @@
 package com.santharam.get_fit.membership.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.santharam.get_fit.users.entity.Users;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+@Entity
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,4 +16,7 @@ public class Membership {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users users;
 }

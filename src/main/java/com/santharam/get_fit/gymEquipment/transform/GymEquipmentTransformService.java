@@ -14,7 +14,6 @@ return GymEquipment.builder()
         .equipment(equipment)
         .quantity(request.getQuantity())
         .available(request.getAvailable())
-        .status(request.getStatus())
         .build();
 }
 }

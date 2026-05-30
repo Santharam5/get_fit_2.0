@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class EquipmentTransformService {
     public Equipment toEntity(EquipmentRequestDto equipmentRequestDto){
         return Equipment.builder()

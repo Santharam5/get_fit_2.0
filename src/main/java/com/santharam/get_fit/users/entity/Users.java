@@ -24,10 +24,10 @@ public class Users {
     @Column(unique = true)
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Roles roles;
     private String phoneNumber;
     @OneToMany(mappedBy = "users")
-    @JoinColumn(name="ID_MEMBERSHIP")
     private List<Membership> membership;
 
 }
