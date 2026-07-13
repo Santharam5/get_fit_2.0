@@ -1,13 +1,17 @@
+
 package com.santharam.get_fit.gym.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.santharam.get_fit.gymEquipment.entity.GymEquipment;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -27,8 +31,11 @@ public class Gym {
     @Column(nullable = false,length = 500)
     private String location;
     //Gym rating
-    @Column(nullable = false,length = 2)
-    private Integer rating;
+    @Column(precision = 2, scale = 1)
+    @Digits(integer = 1, fraction = 1)
+    @DecimalMin("0.0")
+    @DecimalMax("5.0")
+    private BigDecimal rating;
     //Gym description
     @Column(nullable = false,length = 1000)
     private String description;

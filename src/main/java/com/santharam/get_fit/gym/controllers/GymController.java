@@ -3,6 +3,7 @@ package com.santharam.get_fit.gym.controllers;
 import com.santharam.get_fit.gym.dto.GymRequestDto;
 import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.gym.service.GymService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class GymController {
     @Autowired
     GymService gymService;
     @PostMapping("/create")
-    public ResponseEntity<Gym> creatingGym(@RequestBody GymRequestDto gymRequestDto){
+    public ResponseEntity<Gym> creatingGym(@Valid @RequestBody GymRequestDto gymRequestDto){
         Gym gym=gymService.createGym(gymRequestDto);
         return ResponseEntity.status(201).body(gym);
     }

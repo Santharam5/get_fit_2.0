@@ -42,7 +42,7 @@ public class MembershipServiceImpl implements MembershipService {
     @Override
     public List<Membership> getMembershipByUser(Long userId) {
 
-        return membershipRepo.findByUserId(userId);
+        return membershipRepo.findByUsersId(userId);
     }
 
     @Override

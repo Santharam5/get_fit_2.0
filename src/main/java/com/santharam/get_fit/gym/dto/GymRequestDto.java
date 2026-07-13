@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +16,7 @@ public class GymRequestDto {
     //Gym location
     private String location;
     //Gym rating
-    private Integer rating;
+    private BigDecimal rating;
     //Gym description
     private String description;
 
