@@ -39,6 +39,8 @@ public class Exercise {
     @Max(value = 500, message = "Calories burned cannot exceed 500")
     @Column(name = "calories_burn_per_set")
     private Integer caloriesBurnPerSet;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_id")
     private Equipment equipment;
