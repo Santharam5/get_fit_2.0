@@ -3,12 +3,15 @@ package com.santharam.get_fit.exercise.entity;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.exercise.enums.Difficulty;
 import com.santharam.get_fit.exercise.enums.MuscleGroup;
+import com.santharam.get_fit.routineExercise.entity.RoutineExercise;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -44,4 +47,6 @@ public class Exercise {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipment_id")
     private Equipment equipment;
+    @OneToMany(mappedBy = "exercise")
+    private List<RoutineExercise> routineExercises;
 }
