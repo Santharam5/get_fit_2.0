@@ -1,5 +1,6 @@
 package com.santharam.get_fit.routine.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.santharam.get_fit.routine.enums.Goal;
 import com.santharam.get_fit.routineExercise.entity.RoutineExercise;
@@ -9,10 +10,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -20,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "routine")
 public class Routine {
     @Id
@@ -41,8 +40,9 @@ public class Routine {
     private String description;
     @Builder.Default
     private Boolean active = true;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private Users users;
     @OneToMany(mappedBy = "routine",
             cascade = CascadeType.ALL,

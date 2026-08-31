@@ -30,4 +30,5 @@ public class EquipmentController {
         Equipment equipment=equipmentService.getEquipment(id);
         return ResponseEntity.status(200).body(equipment);
     }
+    // Todo need to add the update and delete methods
 }

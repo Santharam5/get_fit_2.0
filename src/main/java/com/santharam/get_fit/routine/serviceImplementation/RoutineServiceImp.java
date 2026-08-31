@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,9 +24,11 @@ import java.util.List;
 @Service
 @Builder
 public class RoutineServiceImp implements RoutineService {
-
+    @Autowired
     private RoutineRepo routineRepo;
+    @Autowired
     private UsersRepo usersRepo;
+    @Autowired
     private RoutineTransformService routineTransformService;
 
     @Override

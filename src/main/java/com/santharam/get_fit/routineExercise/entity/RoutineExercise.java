@@ -1,29 +1,29 @@
 package com.santharam.get_fit.routineExercise.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.santharam.get_fit.exercise.entity.Exercise;
 import com.santharam.get_fit.routine.entity.Routine;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 @Table(name = "routine_exercise")
 public class RoutineExercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="routine_id",nullable = false)
+    @JsonBackReference
     private Routine routine;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="exercise_id",nullable = false)
     private Exercise exercise;
     @Min(value = 1, message = "Sets must be at least 1")
@@ -46,4 +46,5 @@ public class RoutineExercise {
     private Integer exerciseOrder;
     @Column(name = "is_active")
     private Boolean isActive = true;
+
 }

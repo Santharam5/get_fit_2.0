@@ -30,5 +30,5 @@ public class GymController {
         Gym gym=gymService.getGym(id);
         return ResponseEntity.status(200).body(gym);
     }
-
+// Todo need to add the update and delete methods
 }

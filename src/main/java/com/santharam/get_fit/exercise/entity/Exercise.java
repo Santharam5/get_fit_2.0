@@ -12,11 +12,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name="exercise")
 public class Exercise {
     @Id
@@ -44,9 +47,10 @@ public class Exercise {
     private Integer caloriesBurnPerSet;
     @Column(name = "is_active")
     private Boolean isActive = true;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "equipment_id")
     private Equipment equipment;
     @OneToMany(mappedBy = "exercise")
+    @JsonIgnore
     private List<RoutineExercise> routineExercises;
 }

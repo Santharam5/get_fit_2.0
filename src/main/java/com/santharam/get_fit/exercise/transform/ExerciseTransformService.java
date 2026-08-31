@@ -3,18 +3,13 @@ package com.santharam.get_fit.exercise.transform;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.exercise.dto.ExerciseRequestDto;
 import com.santharam.get_fit.exercise.entity.Exercise;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Component
+@Service
 public class ExerciseTransformService {
     public Exercise toEntity(ExerciseRequestDto exerciseRequestDto, Equipment equipment) {
         Exercise exercise = new Exercise();

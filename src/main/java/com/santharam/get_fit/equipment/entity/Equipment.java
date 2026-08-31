@@ -1,5 +1,6 @@
 package com.santharam.get_fit.equipment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.santharam.get_fit.gymEquipment.entity.GymEquipment;
 import jakarta.persistence.*;
@@ -31,6 +32,7 @@ public class Equipment {
     private String category;
     // one to many into Gym Equipment Entity
     @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "equipment",cascade = CascadeType.ALL)
     private List<GymEquipment> equipments;
 }

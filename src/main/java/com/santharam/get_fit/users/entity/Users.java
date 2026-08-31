@@ -1,5 +1,7 @@
 package com.santharam.get_fit.users.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.santharam.get_fit.membership.entity.Membership;
 import com.santharam.get_fit.users.enums.Roles;
 import jakarta.persistence.*;
@@ -28,6 +30,7 @@ public class Users {
     private Roles roles;
     private String phoneNumber;
     @OneToMany(mappedBy = "users")
+    @JsonManagedReference
     private List<Membership> membership;
 
 }

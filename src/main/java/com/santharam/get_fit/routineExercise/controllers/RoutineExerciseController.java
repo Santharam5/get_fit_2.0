@@ -37,6 +37,11 @@ public class RoutineExerciseController {
         return ResponseEntity.ok(routineExerciseService.getRoutineExercisesByRoutineId(routineId));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<RoutineExercise>> getAll() {
+        return ResponseEntity.ok(routineExerciseService.getAllRoutineExercises());
+    }
+
     @GetMapping("/exists/{routineId}/{exerciseId}")
     public ResponseEntity<Boolean> exists(@PathVariable Long routineId, @PathVariable Long exerciseId) {
         return ResponseEntity.ok(routineExerciseService.existsByRoutineIdAndExerciseId(routineId, exerciseId));

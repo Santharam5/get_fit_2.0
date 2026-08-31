@@ -4,17 +4,13 @@ import com.santharam.get_fit.exercise.entity.Exercise;
 import com.santharam.get_fit.routine.entity.Routine;
 import com.santharam.get_fit.routineExercise.dto.RoutineExerciseRequestDto;
 import com.santharam.get_fit.routineExercise.entity.RoutineExercise;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Service
 @Builder
-@Component
 public class RoutineExerciseTransformService {
 
     public RoutineExercise toEntity(RoutineExerciseRequestDto dto) {
@@ -40,3 +36,4 @@ public class RoutineExerciseTransformService {
                 .build();
     }
 }
+

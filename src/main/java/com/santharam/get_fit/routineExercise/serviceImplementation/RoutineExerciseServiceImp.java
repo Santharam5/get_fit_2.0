@@ -106,6 +106,11 @@ public class RoutineExerciseServiceImp implements RoutineExerciseService {
         return routineExerciseRepo.existsByRoutineIdAndExerciseId(routineId, exerciseId);
     }
 
+    @Override
+    public List<RoutineExercise> getAllRoutineExercises() {
+        return routineExerciseRepo.findAll();
+    }
+
     // repository-like methods exposed by the service implementation
     public List<RoutineExercise> findByRoutineId(Long routineId) {
         return routineExerciseRepo.findByRoutineId(routineId);

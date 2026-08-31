@@ -13,6 +13,8 @@ public interface RoutineExerciseService {
 
     List<RoutineExercise> getRoutineExercisesByRoutineId(Long routineId);
 
+    List<RoutineExercise> getAllRoutineExercises();
+
     void deleteRoutineExercise(Long id);
 
     boolean existsByRoutineIdAndExerciseId(Long routineId, Long exerciseId);

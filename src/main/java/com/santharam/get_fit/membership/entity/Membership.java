@@ -1,5 +1,6 @@
 package com.santharam.get_fit.membership.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.users.entity.Users;
 import jakarta.persistence.*;
@@ -22,9 +23,11 @@ public class Membership {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private Users users;
     @ManyToOne
     @JoinColumn(name = "gym_id")
+    @JsonBackReference
     private Gym gym;
     private String planType;
     private LocalDate startDate;
