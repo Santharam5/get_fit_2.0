@@ -9,4 +9,6 @@ public interface GymService {
     public Gym createGym(GymRequestDto gymRequestDto);
     public List<Gym> getAllGyms();
     public Gym getGym(Long id);
+    public Gym updateGym(Long id, GymRequestDto gymRequestDto);
+    public void deleteGym(Long id);
 }

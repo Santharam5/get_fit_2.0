@@ -29,4 +29,16 @@ public class MembershipController {
         List<Membership> membership=membershipService.getMembershipByGym(gymId);
         return ResponseEntity.status(200).body(membership);
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Membership> updateMembership(@PathVariable Long id, @RequestBody MembershipRequestDto request){
+        Membership membership = membershipService.updateMembership(id, request);
+        return ResponseEntity.status(200).body(membership);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteMembership(@PathVariable Long id){
+        membershipService.deleteMembership(id);
+        return ResponseEntity.noContent().build();
+    }
 }

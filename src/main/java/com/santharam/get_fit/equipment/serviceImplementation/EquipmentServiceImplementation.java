@@ -5,6 +5,8 @@ import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;
 import com.santharam.get_fit.equipment.service.EquipmentService;
 import com.santharam.get_fit.equipment.transform.EquipmentTransformService;
+import com.santharam.get_fit.exercise.repository.ExerciseRepo;
+import com.santharam.get_fit.gymEquipment.repository.GymEquipmentRepo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +26,10 @@ public class EquipmentServiceImplementation implements EquipmentService {
     EquipmentTransformService equipmentTransformService;
     @Autowired
     EquipmentRepo equipmentRepo;
+    @Autowired
+    GymEquipmentRepo gymEquipmentRepo;
+    @Autowired
+    ExerciseRepo exerciseRepo;
 
     @Override
     public Equipment CreateEquipment(EquipmentRequestDto equipmentRequestDto) {
@@ -39,5 +45,37 @@ public class EquipmentServiceImplementation implements EquipmentService {
     @Override
     public Equipment getEquipment(Long id) {
         return equipmentRepo.findById(id).orElseThrow(()->new RuntimeException("Equipment not found"));
+    }
+
+    @Override
+    public Equipment updateEquipment(Long id, EquipmentRequestDto equipmentRequestDto) {
+        Equipment existingEquipment = equipmentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+
+        existingEquipment.setName(equipmentRequestDto.getName());
+        existingEquipment.setDescription(equipmentRequestDto.getDescription());
+        existingEquipment.setCategory(equipmentRequestDto.getCategory());
+
+        return equipmentRepo.save(existingEquipment);
+    }
+
+    @Override
+    public void deleteEquipment(Long id) {
+        Equipment existingEquipment = equipmentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+
+        var gymEquipmentAssignments = gymEquipmentRepo.findByEquipmentId(id);
+        if (gymEquipmentAssignments != null && !gymEquipmentAssignments.isEmpty()) {
+            throw new RuntimeException("Cannot delete equipment with existing gym assignments");
+        }
+        var exercises = exerciseRepo.findByEquipmentId(id);
+
+        if (exercises != null && !exercises.isEmpty()) {
+            throw new RuntimeException(
+                    "Cannot delete equipment with existing exercises"
+            );
+        }
+
+        equipmentRepo.delete(existingEquipment);
     }
 }

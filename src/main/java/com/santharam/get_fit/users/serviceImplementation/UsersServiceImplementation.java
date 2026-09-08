@@ -1,5 +1,6 @@
 package com.santharam.get_fit.users.serviceImplementation;
 
+import com.santharam.get_fit.membership.repository.MembershipRepo;
 import com.santharam.get_fit.users.dto.UsersRequestDto;
 import com.santharam.get_fit.users.entity.Users;
 import com.santharam.get_fit.users.repository.UsersRepo;
@@ -23,6 +24,8 @@ public class UsersServiceImplementation implements UsersService {
     UsersRepo usersRepo;
     @Autowired
     UsersTransformService usersTransformService;
+    @Autowired
+    MembershipRepo membershipRepo;
     @Override
     public Users createUser(UsersRequestDto usersRequestDto) {
         boolean exists=usersRepo.existsByEmail(usersRequestDto.getEmail());
@@ -43,5 +46,32 @@ public class UsersServiceImplementation implements UsersService {
     @Override
     public Users getUserById(Long userId) {
         return usersRepo.findById(userId).orElseThrow(()->new RuntimeException("User not Found"));
+    }
+
+    @Override
+    public Users updateUser(Long userId, UsersRequestDto usersRequestDto) {
+        Users existingUser = usersRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not Found"));
+
+        existingUser.setName(usersRequestDto.getName());
+        existingUser.setEmail(usersRequestDto.getEmail());
+        existingUser.setPassword(usersRequestDto.getPassword());
+        existingUser.setRoles(usersRequestDto.getRoles());
+        existingUser.setPhoneNumber(usersRequestDto.getPhoneNumber());
+
+        return usersRepo.save(existingUser);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        Users existingUser = usersRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not Found"));
+
+        var memberships = membershipRepo.findByUsersId(userId);
+        if (memberships != null && !memberships.isEmpty()) {
+            throw new RuntimeException("Cannot delete user with existing memberships");
+        }
+
+        usersRepo.delete(existingUser);
     }
 }

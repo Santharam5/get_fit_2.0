@@ -50,4 +50,40 @@ public class MembershipServiceImpl implements MembershipService {
 
         return membershipRepo.findByGymId(gymId);
     }
+
+    @Override
+    public Membership updateMembership(Long membershipId, MembershipRequestDto request) {
+        Membership existingMembership = membershipRepo.findById(membershipId)
+                .orElseThrow(() -> new RuntimeException("Membership not found"));
+
+        if (request.getUserId() != null) {
+            Users user = usersRepo.findById(request.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            existingMembership.setUsers(user);
+        }
+
+        if (request.getGymId() != null) {
+            Gym gym = gymRepo.findById(request.getGymId())
+                    .orElseThrow(() -> new RuntimeException("Gym not found"));
+            existingMembership.setGym(gym);
+        }
+
+        if (request.getPlanType() != null) {
+            existingMembership.setPlanType(request.getPlanType());
+        }
+
+        if (request.getPaymentStatus() != null) {
+            existingMembership.setPaymentStatus(request.getPaymentStatus());
+        }
+
+        return membershipRepo.save(existingMembership);
+    }
+
+    @Override
+    public void deleteMembership(Long membershipId) {
+        Membership existingMembership = membershipRepo.findById(membershipId)
+                .orElseThrow(() -> new RuntimeException("Membership not found"));
+
+        membershipRepo.delete(existingMembership);
+    }
 }

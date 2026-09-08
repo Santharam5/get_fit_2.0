@@ -26,9 +26,20 @@ public class GymController {
         return ResponseEntity.status(200).body(gym);
     }
     @GetMapping("/get")
-    public ResponseEntity<Gym> gettingSingleGym(Long id){
+    public ResponseEntity<Gym> gettingSingleGym(@RequestParam Long id){
         Gym gym=gymService.getGym(id);
         return ResponseEntity.status(200).body(gym);
     }
-// Todo need to add the update and delete methods
+
+    @PutMapping("/update")
+    public ResponseEntity<Gym> updateGym(@RequestParam Long id, @Valid @RequestBody GymRequestDto gymRequestDto){
+        Gym gym = gymService.updateGym(id, gymRequestDto);
+        return ResponseEntity.status(200).body(gym);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteGym(@PathVariable Long id){
+        gymService.deleteGym(id);
+        return ResponseEntity.noContent().build();
+    }
 }

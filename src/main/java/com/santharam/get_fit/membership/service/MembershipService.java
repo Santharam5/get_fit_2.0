@@ -10,5 +10,7 @@ public interface MembershipService {
     Membership createMembership(MembershipRequestDto request);
     List<Membership> getMembershipByUser(Long userId);
     List<Membership> getMembershipByGym(Long gymId);
+    Membership updateMembership(Long membershipId, MembershipRequestDto request);
+    void deleteMembership(Long membershipId);
 
 }

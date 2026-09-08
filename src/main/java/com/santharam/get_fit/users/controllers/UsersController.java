@@ -32,5 +32,16 @@ public class UsersController {
         return ResponseEntity.status(200).body(users);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Users> updateUser(@RequestParam Long userId, @RequestBody UsersRequestDto request){
+        Users users = usersService.updateUser(userId, request);
+        return ResponseEntity.status(200).body(users);
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId){
+        usersService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

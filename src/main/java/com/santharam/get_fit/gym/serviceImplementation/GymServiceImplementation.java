@@ -4,6 +4,7 @@ import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.gym.repository.GymRepo;
 import com.santharam.get_fit.gym.service.GymService;
 import com.santharam.get_fit.gym.transform.GymTransformService;
+import com.santharam.get_fit.membership.repository.MembershipRepo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class GymServiceImplementation implements GymService {
     GymRepo gymRepo;
 @Autowired
     GymTransformService gymTransformService;
+@Autowired
+MembershipRepo membershipRepo;
 
 
     @Override
@@ -38,5 +41,26 @@ public class GymServiceImplementation implements GymService {
     @Override
     public Gym getGym(Long id) {
         return gymRepo.findById(id).orElseThrow(()->new RuntimeException("Gym not found"));
+    }
+
+    @Override
+    public Gym updateGym(Long id, GymRequestDto gymRequestDto) {
+        Gym existing = gymRepo.findById(id).orElseThrow(() -> new RuntimeException("Gym not found"));
+        existing.setName(gymRequestDto.getName());
+        existing.setDescription(gymRequestDto.getDescription());
+        existing.setLocation(gymRequestDto.getLocation());
+        existing.setRating(gymRequestDto.getRating());
+        return gymRepo.save(existing);
+    }
+
+    @Override
+    public void deleteGym(Long id) {
+        // prevent delete if memberships exist for this gym
+        var memberships = membershipRepo.findByGymId(id);
+        if (memberships != null && !memberships.isEmpty()) {
+            throw new RuntimeException("Cannot delete gym with existing memberships");
+        }
+        Gym existing = gymRepo.findById(id).orElseThrow(() -> new RuntimeException("Gym not found"));
+        gymRepo.delete(existing);
     }
 }

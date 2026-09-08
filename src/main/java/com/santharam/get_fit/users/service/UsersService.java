@@ -10,5 +10,6 @@ public interface UsersService {
      Users createUser(UsersRequestDto usersRequestDto);
      List<Users> getAllUSers();
      Users getUserById(Long userId);
-
+     Users updateUser(Long userId, UsersRequestDto usersRequestDto);
+     void deleteUser(Long userId);
 }
