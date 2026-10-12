@@ -1,8 +1,8 @@
 package com.santharam.get_fit.users.serviceImplementation;
 
-import GlobalExceptionHandler.EntityMappedException;
-import GlobalExceptionHandler.HandleEntityAlreadyExistsException;
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.EntityMappedException;
+import com.santharam.get_fit.GlobalExceptionHandler.HandleEntityAlreadyExistsException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.membership.repository.MembershipRepo;
 import com.santharam.get_fit.users.dto.UsersRequestDto;
 import com.santharam.get_fit.users.entity.Users;

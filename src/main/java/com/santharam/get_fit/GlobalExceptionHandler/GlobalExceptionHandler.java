@@ -1,4 +1,4 @@
-package GlobalExceptionHandler;
+package com.santharam.get_fit.GlobalExceptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.santharam.get_fit.routine.serviceImplementation;
 
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.routine.dto.RoutineRequestDto;
 import com.santharam.get_fit.routine.entity.Routine;
 import com.santharam.get_fit.routine.repository.RoutineRepo;

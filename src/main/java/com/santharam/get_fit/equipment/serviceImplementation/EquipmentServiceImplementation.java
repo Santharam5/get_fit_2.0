@@ -1,7 +1,7 @@
 package com.santharam.get_fit.equipment.serviceImplementation;
 
-import GlobalExceptionHandler.HandleEntityAlreadyExistsException;
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.HandleEntityAlreadyExistsException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.equipment.dto.EquipmentRequestDto;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;

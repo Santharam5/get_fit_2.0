@@ -1,4 +1,4 @@
-package GlobalExceptionHandler;
+package com.santharam.get_fit.GlobalExceptionHandler;
 
 import lombok.Getter;
 import lombok.Setter;

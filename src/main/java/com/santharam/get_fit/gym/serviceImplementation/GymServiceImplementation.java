@@ -1,6 +1,6 @@
 package com.santharam.get_fit.gym.serviceImplementation;
-import GlobalExceptionHandler.HandleEntityAlreadyExistsException;
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.HandleEntityAlreadyExistsException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.gym.dto.GymRequestDto;
 import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.gym.repository.GymRepo;

@@ -1,7 +1,7 @@
 package com.santharam.get_fit.exercise.serviceImplementation;
 
-import GlobalExceptionHandler.EntityMappedException;
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.EntityMappedException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;
 import com.santharam.get_fit.exercise.dto.ExerciseRequestDto;

@@ -1,6 +1,6 @@
 package com.santharam.get_fit.membership.serviceImplementation;
 
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.gym.repository.GymRepo;
 import com.santharam.get_fit.membership.dto.MembershipRequestDto;

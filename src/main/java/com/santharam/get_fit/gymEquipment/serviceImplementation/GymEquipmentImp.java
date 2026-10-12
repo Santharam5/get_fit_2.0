@@ -1,6 +1,6 @@
 package com.santharam.get_fit.gymEquipment.serviceImplementation;
 
-import GlobalExceptionHandler.ResourceNotFoundException;
+import com.santharam.get_fit.GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;
 import com.santharam.get_fit.gym.entity.Gym;
