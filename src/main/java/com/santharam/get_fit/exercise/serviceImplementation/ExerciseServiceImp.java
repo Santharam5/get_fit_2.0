@@ -1,5 +1,7 @@
 package com.santharam.get_fit.exercise.serviceImplementation;
 
+import GlobalExceptionHandler.EntityMappedException;
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;
 import com.santharam.get_fit.exercise.dto.ExerciseRequestDto;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Data
 @Transactional
 @AllArgsConstructor
@@ -31,32 +34,26 @@ public class ExerciseServiceImp implements ExerciseService {
     EquipmentRepo equipmentRepo;
     @Autowired
     ExerciseTransformService exerciseTransformService;
+
     /**
      * @param exerciseRequestDto
      * @return
      */
     @Override
     public ExerciseRequestDto createExercise(ExerciseRequestDto exerciseRequestDto) {
-        if (exerciseRepo.existsByExerciseNameIgnoreCase(
-                exerciseRequestDto.getExerciseName())) {
+        if (exerciseRepo.existsByExerciseNameIgnoreCase(exerciseRequestDto.getExerciseName())) {
 
-            throw new RuntimeException("Exercise already exists.");
+            throw new EntityMappedException("Exercise already exists "+exerciseRequestDto.getExerciseName());
         }
 
         Equipment equipment = null;
 
         if (exerciseRequestDto.getEquipmentId() != null) {
 
-            equipment = equipmentRepo
-                    .findById(exerciseRequestDto.getEquipmentId())
-                    .orElseThrow(() ->
-                            new RuntimeException("Equipment not found."));
+            equipment = equipmentRepo.findById(exerciseRequestDto.getEquipmentId()).orElseThrow(() -> new ResourceNotFoundException("Equipment not found " + exerciseRequestDto.getEquipmentId()));
         }
 
-        Exercise exercise = exerciseTransformService.toEntity(
-                exerciseRequestDto,
-                equipment
-        );
+        Exercise exercise = exerciseTransformService.toEntity(exerciseRequestDto, equipment);
 
         Exercise savedExercise = exerciseRepo.save(exercise);
 
@@ -70,26 +67,20 @@ public class ExerciseServiceImp implements ExerciseService {
      */
     @Override
     public ExerciseRequestDto updateExercise(Long id, ExerciseRequestDto exerciseRequestDto) {
-        Exercise exercise = exerciseRepo.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Exercise not found."));
+        Exercise exercise = exerciseRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Exercise not found " + id));
 
         Equipment equipment = null;
 
         if (exerciseRequestDto.getEquipmentId() != null) {
 
-            equipment = equipmentRepo
-                    .findById(exerciseRequestDto.getEquipmentId())
-                    .orElseThrow(() ->
-                            new RuntimeException("Equipment not found."));
+            equipment = equipmentRepo.findById(exerciseRequestDto.getEquipmentId()).orElseThrow(() -> new ResourceNotFoundException("Equipment not found " + exerciseRequestDto.getEquipmentId()));
         }
 
         exercise.setExerciseName(exerciseRequestDto.getExerciseName());
         exercise.setMuscleGroup(exerciseRequestDto.getMuscleGroup());
         exercise.setDifficulty(exerciseRequestDto.getDifficulty());
         exercise.setDescription(exerciseRequestDto.getDescription());
-        exercise.setCaloriesBurnPerSet(
-                exerciseRequestDto.getCaloriesBurnPerSet());
+        exercise.setCaloriesBurnPerSet(exerciseRequestDto.getCaloriesBurnPerSet());
 
         exercise.setIsActive(exerciseRequestDto.getIsActive());
 
@@ -106,9 +97,7 @@ public class ExerciseServiceImp implements ExerciseService {
      */
     @Override
     public ExerciseRequestDto getExerciseById(Long id) {
-        Exercise exercise = exerciseRepo.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Exercise not found."));
+        Exercise exercise = exerciseRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Exercise not found " + id));
 
         return exerciseTransformService.convertToDTO(exercise);
     }
@@ -118,10 +107,7 @@ public class ExerciseServiceImp implements ExerciseService {
      */
     @Override
     public List<ExerciseRequestDto> getAllExercises() {
-        return exerciseRepo.findByIsActiveTrue()
-                .stream()
-                .map(exerciseTransformService::convertToDTO)
-                .toList();
+        return exerciseRepo.findByIsActiveTrue().stream().map(exerciseTransformService::convertToDTO).toList();
     }
 
     /**
@@ -129,9 +115,7 @@ public class ExerciseServiceImp implements ExerciseService {
      */
     @Override
     public void deleteExercise(Long exerciseId) {
-        Exercise exercise = exerciseRepo.findById(exerciseId)
-                .orElseThrow(() ->
-                        new RuntimeException("Exercise not found."));
+        Exercise exercise = exerciseRepo.findById(exerciseId).orElseThrow(() -> new ResourceNotFoundException("Exercise not found " + exerciseId));
 
         exercise.setIsActive(false);
 

@@ -1,5 +1,8 @@
 package com.santharam.get_fit.users.serviceImplementation;
 
+import GlobalExceptionHandler.EntityMappedException;
+import GlobalExceptionHandler.HandleEntityAlreadyExistsException;
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.membership.repository.MembershipRepo;
 import com.santharam.get_fit.users.dto.UsersRequestDto;
 import com.santharam.get_fit.users.entity.Users;
@@ -30,7 +33,7 @@ public class UsersServiceImplementation implements UsersService {
     public Users createUser(UsersRequestDto usersRequestDto) {
         boolean exists=usersRepo.existsByEmail(usersRequestDto.getEmail());
         if(exists){
-            throw new RuntimeException("Email already Exists");
+            throw new EntityMappedException("Email already exists " + usersRequestDto.getEmail());
         }
         else{
             Users users=usersTransformService.toEntity(usersRequestDto);
@@ -45,13 +48,13 @@ public class UsersServiceImplementation implements UsersService {
 
     @Override
     public Users getUserById(Long userId) {
-        return usersRepo.findById(userId).orElseThrow(()->new RuntimeException("User not Found"));
+        return usersRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found " + userId));
     }
 
     @Override
     public Users updateUser(Long userId, UsersRequestDto usersRequestDto) {
         Users existingUser = usersRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found " + userId));
 
         existingUser.setName(usersRequestDto.getName());
         existingUser.setEmail(usersRequestDto.getEmail());
@@ -65,11 +68,11 @@ public class UsersServiceImplementation implements UsersService {
     @Override
     public void deleteUser(Long userId) {
         Users existingUser = usersRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found " + userId));
 
         var memberships = membershipRepo.findByUsersId(userId);
         if (memberships != null && !memberships.isEmpty()) {
-            throw new RuntimeException("Cannot delete user with existing memberships");
+            throw new HandleEntityAlreadyExistsException("Cannot delete user with existing memberships " + userId);
         }
 
         usersRepo.delete(existingUser);

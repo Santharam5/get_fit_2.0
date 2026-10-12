@@ -1,5 +1,7 @@
 package com.santharam.get_fit.routineExercise.serviceImplementation;
 
+import GlobalExceptionHandler.EntityMappedException;
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.exercise.entity.Exercise;
 import com.santharam.get_fit.exercise.repository.ExerciseRepo;
 import com.santharam.get_fit.routine.entity.Routine;
@@ -39,13 +41,13 @@ public class RoutineExerciseServiceImp implements RoutineExerciseService {
     @Override
     public RoutineExercise createRoutineExercise(RoutineExerciseRequestDto requestDto) {
         Routine routine = routineRepo.findById(requestDto.getRoutineId())
-                .orElseThrow(() -> new RuntimeException("Routine not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine not found " + requestDto.getRoutineId()));
 
         Exercise exercise = exerciseRepo.findById(requestDto.getExerciseId())
-                .orElseThrow(() -> new RuntimeException("Exercise not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercise not found " + requestDto.getExerciseId()));
 
         if (routineExerciseRepo.existsByRoutineIdAndExerciseId(routine.getId(), exercise.getId())) {
-            throw new RuntimeException("Routine already contains this exercise.");
+            throw new EntityMappedException("Routine already contains this exercise.");
         }
 
         RoutineExercise routineExercise = routineExerciseTransformService.toEntity(requestDto);
@@ -58,17 +60,17 @@ public class RoutineExerciseServiceImp implements RoutineExerciseService {
     @Override
     public RoutineExercise updateRoutineExercise(Long id, RoutineExerciseRequestDto requestDto) {
         RoutineExercise existing = routineExerciseRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("RoutineExercise not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine exercise not found " + id));
 
         if (requestDto.getRoutineId() != null && !requestDto.getRoutineId().equals(existing.getRoutine().getId())) {
             Routine routine = routineRepo.findById(requestDto.getRoutineId())
-                    .orElseThrow(() -> new RuntimeException("Routine not found."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Routine not found " + requestDto.getRoutineId()));
             existing.setRoutine(routine);
         }
 
         if (requestDto.getExerciseId() != null && !requestDto.getExerciseId().equals(existing.getExercise().getId())) {
             Exercise exercise = exerciseRepo.findById(requestDto.getExerciseId())
-                    .orElseThrow(() -> new RuntimeException("Exercise not found."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Exercise not found " + requestDto.getExerciseId()));
             existing.setExercise(exercise);
         }
         if (requestDto.getSets() != null) existing.setSets(requestDto.getSets());
@@ -85,7 +87,7 @@ public class RoutineExerciseServiceImp implements RoutineExerciseService {
     @Override
     public RoutineExercise getRoutineExerciseById(Long id) {
         return routineExerciseRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("RoutineExercise not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine exercise not found " + id));
     }
 
     @Override
@@ -96,7 +98,7 @@ public class RoutineExerciseServiceImp implements RoutineExerciseService {
     @Override
     public void deleteRoutineExercise(Long id) {
         RoutineExercise existing = routineExerciseRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("RoutineExercise not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine exercise not found " + id));
         existing.setIsActive(false);
         routineExerciseRepo.save(existing);
     }

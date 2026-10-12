@@ -1,5 +1,6 @@
 package com.santharam.get_fit.routine.serviceImplementation;
 
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.routine.dto.RoutineRequestDto;
 import com.santharam.get_fit.routine.entity.Routine;
 import com.santharam.get_fit.routine.repository.RoutineRepo;
@@ -36,7 +37,7 @@ public class RoutineServiceImp implements RoutineService {
         Users users = null;
         if (routineRequestDto.getUserId() != null) {
             users = usersRepo.findById(routineRequestDto.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found."));
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found " + routineRequestDto.getUserId()));
         }
 
         Routine routine = routineTransformService.toEntity(routineRequestDto);
@@ -48,7 +49,7 @@ public class RoutineServiceImp implements RoutineService {
     @Override
     public Routine updateRoutine(Long id, RoutineRequestDto routineRequestDto) {
         Routine existing = routineRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Routine not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine not found " + id));
 
         if (routineRequestDto.getRoutineName() != null) existing.setRoutineName(routineRequestDto.getRoutineName());
         if (routineRequestDto.getGoal() != null) existing.setGoal(routineRequestDto.getGoal());
@@ -59,7 +60,7 @@ public class RoutineServiceImp implements RoutineService {
         if (routineRequestDto.getUserId() != null) {
             if (existing.getUsers() == null || !routineRequestDto.getUserId().equals(existing.getUsers().getId())) {
                 Users users = usersRepo.findById(routineRequestDto.getUserId())
-                        .orElseThrow(() -> new RuntimeException("User not found."));
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found " + routineRequestDto.getUserId()));
                 existing.setUsers(users);
             }
         }
@@ -70,7 +71,7 @@ public class RoutineServiceImp implements RoutineService {
     @Override
     public Routine getRoutineById(Long id) {
         return routineRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Routine not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine not found " + id));
     }
 
     @Override
@@ -89,7 +90,7 @@ public class RoutineServiceImp implements RoutineService {
     @Override
     public void deleteRoutine(Long id) {
         Routine existing = routineRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Routine not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Routine not found " + id));
         existing.setActive(false);
         routineRepo.save(existing);
     }

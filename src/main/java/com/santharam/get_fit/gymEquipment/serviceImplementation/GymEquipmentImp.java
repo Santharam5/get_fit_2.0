@@ -1,5 +1,6 @@
 package com.santharam.get_fit.gymEquipment.serviceImplementation;
 
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;
 import com.santharam.get_fit.gym.entity.Gym;
@@ -30,8 +31,8 @@ public class GymEquipmentImp implements GymEquimentService {
         if(alreadyExists){
             throw  new RuntimeException("Equipment already exists in the gym");
         }else {
-            Gym gym = gymRepo.findById(request.getGymId()).orElseThrow(() ->  new RuntimeException("Gym not found"));
-            Equipment equipment=equipmentRepo.findById(request.getEquipmentId()).orElseThrow(()->new RuntimeException("Equipment not found"));
+            Gym gym = gymRepo.findById(request.getGymId()).orElseThrow(() ->  new ResourceNotFoundException("Gym not found  "+request.getGymId()));
+            Equipment equipment=equipmentRepo.findById(request.getEquipmentId()).orElseThrow(()->new ResourceNotFoundException("Equipment not found "+request.getEquipmentId()));
             GymEquipment gymEquipment=gymEquipmentTransformService.toEntity(request,gym,equipment);
             return gymEquipmentRepo.save(gymEquipment);
         }
@@ -39,12 +40,16 @@ public class GymEquipmentImp implements GymEquimentService {
 
     @Override
     public List<GymEquipment> getEquipmentByGym(Long gymId) {
-        return gymEquipmentRepo.findByGymId(gymId);
+        List<GymEquipment> gymEquipmentList = gymEquipmentRepo.findByGymId(gymId);
+        if (gymEquipmentList.isEmpty()) {
+            throw new ResourceNotFoundException("No equipment found for gym " + gymId);
+        }
+        return gymEquipmentList;
     }
 
     @Override
     public GymEquipment updateQuantity(Long gymEquipmentId,Integer quantity) {
-        GymEquipment gymEquipment=gymEquipmentRepo.findById(gymEquipmentId).orElseThrow(()->new RuntimeException("Gym Equipment Not Found"));
+        GymEquipment gymEquipment=gymEquipmentRepo.findById(gymEquipmentId).orElseThrow(()->new ResourceNotFoundException("Gym Equipment Not Found"));
         gymEquipment.setQuantity(quantity);
         return gymEquipmentRepo.save(gymEquipment);
     }
@@ -55,7 +60,7 @@ public class GymEquipmentImp implements GymEquimentService {
                 gymEquipmentRepo.findById(
                         gymEquipmentId
                 ).orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Gym equipment not found"
                         ));
 

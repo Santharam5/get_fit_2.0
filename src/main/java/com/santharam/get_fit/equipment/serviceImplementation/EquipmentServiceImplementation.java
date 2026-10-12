@@ -1,5 +1,7 @@
 package com.santharam.get_fit.equipment.serviceImplementation;
 
+import GlobalExceptionHandler.HandleEntityAlreadyExistsException;
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.equipment.dto.EquipmentRequestDto;
 import com.santharam.get_fit.equipment.entity.Equipment;
 import com.santharam.get_fit.equipment.repository.EquipmentRepo;
@@ -44,13 +46,13 @@ public class EquipmentServiceImplementation implements EquipmentService {
 
     @Override
     public Equipment getEquipment(Long id) {
-        return equipmentRepo.findById(id).orElseThrow(()->new RuntimeException("Equipment not found"));
+        return equipmentRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Equipment not found "+id));
     }
 
     @Override
     public Equipment updateEquipment(Long id, EquipmentRequestDto equipmentRequestDto) {
         Equipment existingEquipment = equipmentRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment not found "+id));
 
         existingEquipment.setName(equipmentRequestDto.getName());
         existingEquipment.setDescription(equipmentRequestDto.getDescription());
@@ -62,16 +64,16 @@ public class EquipmentServiceImplementation implements EquipmentService {
     @Override
     public void deleteEquipment(Long id) {
         Equipment existingEquipment = equipmentRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment not found "+id));
 
         var gymEquipmentAssignments = gymEquipmentRepo.findByEquipmentId(id);
         if (gymEquipmentAssignments != null && !gymEquipmentAssignments.isEmpty()) {
-            throw new RuntimeException("Cannot delete equipment with existing gym assignments");
+            throw new HandleEntityAlreadyExistsException("Cannot delete equipment with existing gym assignments");
         }
         var exercises = exerciseRepo.findByEquipmentId(id);
 
         if (exercises != null && !exercises.isEmpty()) {
-            throw new RuntimeException(
+            throw new HandleEntityAlreadyExistsException(
                     "Cannot delete equipment with existing exercises"
             );
         }

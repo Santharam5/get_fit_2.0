@@ -1,4 +1,6 @@
 package com.santharam.get_fit.gym.serviceImplementation;
+import GlobalExceptionHandler.HandleEntityAlreadyExistsException;
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.gym.dto.GymRequestDto;
 import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.gym.repository.GymRepo;
@@ -40,12 +42,12 @@ MembershipRepo membershipRepo;
 
     @Override
     public Gym getGym(Long id) {
-        return gymRepo.findById(id).orElseThrow(()->new RuntimeException("Gym not found"));
+        return gymRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Gym not found "+id));
     }
 
     @Override
     public Gym updateGym(Long id, GymRequestDto gymRequestDto) {
-        Gym existing = gymRepo.findById(id).orElseThrow(() -> new RuntimeException("Gym not found"));
+        Gym existing = gymRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Gym not found "+id));
         existing.setName(gymRequestDto.getName());
         existing.setDescription(gymRequestDto.getDescription());
         existing.setLocation(gymRequestDto.getLocation());
@@ -58,9 +60,9 @@ MembershipRepo membershipRepo;
         // prevent delete if memberships exist for this gym
         var memberships = membershipRepo.findByGymId(id);
         if (memberships != null && !memberships.isEmpty()) {
-            throw new RuntimeException("Cannot delete gym with existing memberships");
+            throw new HandleEntityAlreadyExistsException("Cannot delete gym with existing memberships "+id);
         }
-        Gym existing = gymRepo.findById(id).orElseThrow(() -> new RuntimeException("Gym not found"));
+        Gym existing = gymRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Gym not found "+id));
         gymRepo.delete(existing);
     }
 }

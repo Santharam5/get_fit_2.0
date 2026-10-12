@@ -1,5 +1,6 @@
 package com.santharam.get_fit.membership.serviceImplementation;
 
+import GlobalExceptionHandler.ResourceNotFoundException;
 import com.santharam.get_fit.gym.entity.Gym;
 import com.santharam.get_fit.gym.repository.GymRepo;
 import com.santharam.get_fit.membership.dto.MembershipRequestDto;
@@ -33,38 +34,42 @@ public class MembershipServiceImpl implements MembershipService {
     MembershipTransformService membershipTransformService;
     @Override
     public Membership createMembership(MembershipRequestDto request) {
-        Users users=usersRepo.findById(request.getUserId()).orElseThrow(()->new RuntimeException("User not found"));
-        Gym gym=gymRepo.findById(request.getGymId()).orElseThrow(()->new RuntimeException("Gym not found"));
+        Users users=usersRepo.findById(request.getUserId()).orElseThrow(()->new ResourceNotFoundException("User not found " + request.getUserId()));
+        Gym gym=gymRepo.findById(request.getGymId()).orElseThrow(()->new ResourceNotFoundException("Gym not found " + request.getGymId()));
         Membership membership=membershipTransformService.toEntity(request,users,gym);
         return membershipRepo.save(membership);
     }
 
     @Override
     public List<Membership> getMembershipByUser(Long userId) {
-
+        if(!usersRepo.existsById(userId)){
+            throw new ResourceNotFoundException("User not found " + userId);
+        }
         return membershipRepo.findByUsersId(userId);
     }
 
     @Override
     public List<Membership> getMembershipByGym(Long gymId) {
-
+        if(!gymRepo.existsById(gymId)){
+            throw new ResourceNotFoundException("Gym not found " + gymId);
+        }
         return membershipRepo.findByGymId(gymId);
     }
 
     @Override
     public Membership updateMembership(Long membershipId, MembershipRequestDto request) {
         Membership existingMembership = membershipRepo.findById(membershipId)
-                .orElseThrow(() -> new RuntimeException("Membership not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Membership not found " + membershipId));
 
         if (request.getUserId() != null) {
             Users user = usersRepo.findById(request.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found " + request.getUserId()));
             existingMembership.setUsers(user);
         }
 
         if (request.getGymId() != null) {
             Gym gym = gymRepo.findById(request.getGymId())
-                    .orElseThrow(() -> new RuntimeException("Gym not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Gym not found " + request.getGymId()));
             existingMembership.setGym(gym);
         }
 
@@ -82,7 +87,7 @@ public class MembershipServiceImpl implements MembershipService {
     @Override
     public void deleteMembership(Long membershipId) {
         Membership existingMembership = membershipRepo.findById(membershipId)
-                .orElseThrow(() -> new RuntimeException("Membership not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Membership not found " + membershipId));
 
         membershipRepo.delete(existingMembership);
     }
